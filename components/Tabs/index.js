@@ -9,27 +9,36 @@
 // //    <div class="tab">topic here</div>
 
 
-// const testRequest = axios.get('https://lambda-times-backend.herokuapp.com/topics')
-//   .then((axiosData) => {
-//     console.log("data", axiosData);
-//   })
-//   .catch(err => {
-//     console.log("Api is currently down", error)
-//   })
+axios
+  .get('https://lambda-times-backend.herokuapp.com/topics')
+  .then((axiosData) => {
+    console.log("data", axiosData);
+    const tab = axiosData.data.topics;
+    tab.forEach(value => {
+      value === "node.js" && (value = "node");
+      const newTab = tabData(value);
+      document.querySelector(".topics").appendChild(newTab);
+      newTab.addEventListener("click", () => {
+        const appear = document.querySelectorAll(".card");
+        appear.forEach(card => {
+          (card.style.display = "none");
+        })
+        const selectedCard = document.querySelectorAll(
+          `.card[data-subject="${newTab.dataset.subject}"]`
+        );
+        selectedCard.forEach(tab => (tab.style.display = "flex"));
+      });
+    })
+  })
+  .catch(err => {
+    console.log("Api is currently down", err)
+  })
 
-// const topics = document.querySelector('.topics');
+function tabData(info) {
+  const tab1 = document.createElement("div");
+  tab1.classList.add("tab");
+  tab1.setAttribute("data-subject", info);
+  tab1.textContent = info;
+  return tab1;
+}
 
-// Object.keys(data.topics).forEach(item => {
-//   console.log(item);
-// });
-
-// tabComponent.forEach(value => {
-//   axios.get('https://lambda-times-backend.herokuapp.com/topics' + value)
-//     .then((axiosData) => {
-//       console.log("Object.keys(topics)", axiosData);
-//       return new tab(axiosData);
-//     })
-//     .catch(err => {
-//       console.log("Api is currently down", error)
-//     })
-// })
